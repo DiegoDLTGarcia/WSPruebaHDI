@@ -16,7 +16,7 @@ namespace WSPruebaHDI.Controllers
 
         [HttpGet]
         [Route("ListaMacotas")]
-        public IActionResult Lista() {
+        public IActionResult listaMascotas() {
             List<Mascota> lista = new List<Mascota>();
 
             try{
@@ -30,6 +30,22 @@ namespace WSPruebaHDI.Controllers
             }catch (Exception ex){
                 return StatusCode(StatusCodes.Status200OK, new { mensaje = ex.Message, response = lista });
 
+            }
+        }
+
+        [HttpPost]
+        [Route("RegristrarMascota")]
+        public IActionResult guardarMascotas([FromBody] Mascota mascota) {
+            try
+            {
+                _dbcontext.Mascotas.Add(mascota);
+                _dbcontext.SaveChanges();
+
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = ex.Message});
             }
         }
     }
