@@ -25,9 +25,9 @@ namespace WSPruebaHDI.Controllers
                                             .Include(r => r.objRaza)
                                             .ThenInclude(e => e.objEspecie)
                                             .ToList();
-                return StatusCode(StatusCodes.Status200OK,new {mensaje ="ok",response= lista});
-
-            }catch (Exception ex){
+                return StatusCode(StatusCodes.Status200OK, lista);
+            }
+            catch (Exception ex){
                 return StatusCode(StatusCodes.Status200OK, new { mensaje = ex.Message, response = lista });
 
             }
