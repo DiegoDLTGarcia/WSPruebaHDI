@@ -21,9 +21,9 @@ namespace WSPruebaHDI.Controllers
 
             try{
                 lista = _dbcontext.Mascotas
-                                            .Include(p => p.objPropietario) // Incluye la propiedad de navegación objPropietario
-                                            .Include(r => r.objRaza) // Incluye la propiedad de navegación objRaza
-                                            .ThenInclude(e => e.objEspecie) // Incluye la propiedad de navegación objEspecie dentro de objRaza
+                                            .Include(p => p.objPropietario)
+                                            .Include(r => r.objRaza)
+                                            .ThenInclude(e => e.objEspecie)
                                             .ToList();
                 return StatusCode(StatusCodes.Status200OK,new {mensaje ="ok",response= lista});
 
@@ -54,9 +54,9 @@ namespace WSPruebaHDI.Controllers
         public IActionResult buscarMascota(int IdMascota){
             try{
                 Mascota mascota = _dbcontext.Mascotas
-                                            .Include(p => p.objPropietario) // Incluye la propiedad de navegación objPropietario
-                                            .Include(r => r.objRaza) // Incluye la propiedad de navegación objRaza
-                                            .ThenInclude(e => e.objEspecie) // Incluye la propiedad de navegación objEspecie dentro de objRaza
+                                            .Include(p => p.objPropietario)
+                                            .Include(r => r.objRaza)
+                                            .ThenInclude(e => e.objEspecie)
                                             .Where(m => m.IdMascota == IdMascota)
                                             .FirstOrDefault() ?? new Mascota();
 
@@ -81,9 +81,9 @@ namespace WSPruebaHDI.Controllers
             try
             {
                 Mascota mascota = _dbcontext.Mascotas
-                                            .Include(p => p.objPropietario) // Incluye la propiedad de navegación objPropietario
-                                            .Include(r => r.objRaza) // Incluye la propiedad de navegación objRaza
-                                            .ThenInclude(e => e.objEspecie) // Incluye la propiedad de navegación objEspecie dentro de objRaza
+                                            .Include(p => p.objPropietario)
+                                            .Include(r => r.objRaza)
+                                            .ThenInclude(e => e.objEspecie)
                                             .Where(m => m.IdMascota == IdMascota)
                                             .FirstOrDefault() ?? new Mascota();
 
@@ -100,6 +100,35 @@ namespace WSPruebaHDI.Controllers
                 _dbcontext.SaveChanges();
 
                 return StatusCode(StatusCodes.Status200OK, new { mensaje = "Mascota actualizada correctamente" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+            }
+        }
+
+        [HttpDelete]
+        [Route("EliminarMascota/{IdMascota}")]
+        public IActionResult eliminarMascota(int IdMascota)
+        {
+            try
+            {
+                Mascota mascota = _dbcontext.Mascotas
+                                            .Include(p => p.objPropietario)
+                                            .Include(r => r.objRaza)
+                                            .ThenInclude(e => e.objEspecie)
+                                            .Where(m => m.IdMascota == IdMascota)
+                                            .FirstOrDefault() ?? new Mascota();
+
+                if (mascota == null)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, new { mensaje = "No se encontró la mascota con el ID especificado" });
+                }
+
+                _dbcontext.Mascotas.Remove(mascota);
+                _dbcontext.SaveChanges();
+
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "Mascota eliminada correctamente" });
             }
             catch (Exception ex)
             {
