@@ -74,6 +74,39 @@ namespace WSPruebaHDI.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("EditarMascota/{IdMascota}")]
+        public IActionResult editarMascota(int IdMascota, [FromBody] Mascota mascotaActualizada)
+        {
+            try
+            {
+                Mascota mascota = _dbcontext.Mascotas
+                                            .Include(p => p.objPropietario) // Incluye la propiedad de navegación objPropietario
+                                            .Include(r => r.objRaza) // Incluye la propiedad de navegación objRaza
+                                            .ThenInclude(e => e.objEspecie) // Incluye la propiedad de navegación objEspecie dentro de objRaza
+                                            .Where(m => m.IdMascota == IdMascota)
+                                            .FirstOrDefault() ?? new Mascota();
+
+                if (mascota == null)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, new { mensaje = "No se encontró la mascota con el ID especificado" });
+                }
+
+                mascota.Nombre = mascotaActualizada.Nombre;
+                mascota.Edad = mascotaActualizada.Edad;
+                mascota.IdPropietario = mascotaActualizada.IdPropietario;
+                mascota.IdRaza = mascotaActualizada.IdRaza;
+
+                _dbcontext.SaveChanges();
+
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "Mascota actualizada correctamente" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = ex.Message });
+            }
+        }
+
 
     }
 }
