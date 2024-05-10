@@ -1,0 +1,23 @@
+-- Get
+http://localhost:5143/api/Mascota/ListaMacotas
+
+-- Post
+http://localhost:5143/api/Mascota/RegristrarMascota
+ {
+        "idPropietario": 1,
+        "nombre": "Coto",
+        "idRaza": 3,
+        "edad": 10
+    }
+	
+-- Put
+http://localhost:5143/api/Mascota/EditarMascota/41
+{
+  "IdPropietario": 2,
+  "Nombre": "Pulga",
+  "IdRaza": 16,
+  "Edad": 7
+}
+
+-- Delete
+http://localhost:5143/api/Mascota/EliminarMascota/21
