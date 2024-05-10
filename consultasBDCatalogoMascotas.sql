@@ -46,7 +46,7 @@ select * from Mascotas;
 select * from Propietarios;
 select * from Razas;
 
-SELECT m.nombre,m.edad,p.nombre,p.apellido,r.nombre_raza,e. FROM Mascotas m
+SELECT m.nombre,m.edad,p.nombre,p.apellido,r.nombre_raza,e.id_especie FROM Mascotas m
 INNER JOIN Propietarios p ON m.id_propietario = p.id_propietario
 INNER JOIN Razas r ON m.id_raza = r.id_raza
 INNER JOIN Especies e ON r.id_especie = e.id_especie;
